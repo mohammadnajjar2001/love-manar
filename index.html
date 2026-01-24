@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+  <meta charset="UTF-8">
+  <title>منار ❤️</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: radial-gradient(circle at top, #1a1f2b, #07080d);
+      overflow: hidden;
+      position: relative;
+      color: white;
+    }
+
+    /* إضاءة */
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, rgba(255, 90, 150, 0.18), transparent 70%);
+      animation: glow 6s infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        opacity: 0.4;
+      }
+
+      to {
+        opacity: 0.9;
+      }
+    }
+
+    /* شاشة البداية */
+    .start-screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .start-btn {
+      padding: 18px 42px;
+      font-size: 24px;
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ff6fa5, #ff3d7f);
+      color: white;
+      box-shadow: 0 20px 40px rgba(255, 80, 130, 0.5);
+      transition: 0.4s ease;
+    }
+
+    .start-btn:hover {
+      transform: scale(1.1);
+    }
+
+    /* المشهد */
+    .scene {
+      position: absolute;
+      inset: 0;
+      display: none;
+      z-index: 2;
+    }
+
+    /* الكلمات */
+    .word {
+      position: absolute;
+      white-space: nowrap;
+      opacity: 0;
+      animation: moveFade 5s ease forwards;
+      text-shadow: 0 0 18px rgba(255, 120, 170, 0.7);
+    }
+
+    /* حركة حقيقية */
+    @keyframes moveFade {
+      0% {
+        opacity: 0;
+        transform: translate(var(--from-x), var(--from-y)) scale(0.8);
+      }
+
+      25% {
+        opacity: 1;
+      }
+
+      70% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(var(--to-x), var(--to-y)) scale(1.15);
+      }
+    }
+
+    /* القلوب */
+    .heart {
+      position: absolute;
+      color: rgba(255, 105, 180, 0.75);
+      animation: float linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      from {
+        transform: translateY(100vh) scale(0.6);
+        opacity: 0;
+      }
+
+      20% {
+        opacity: 1;
+      }
+
+      to {
+        transform: translateY(-10vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    /* زر التخطي */
+    .skip {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      backdrop-filter: blur(10px);
+      display: none;
+      z-index: 20;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- البداية -->
+  <div class="start-screen" id="startScreen">
+    <button class="start-btn" id="startBtn">🎁❤️ جاهزة؟ شوفي هديتي</button>
+  </div>
+
+  <!-- المشهد -->
+  <div class="scene" id="scene"></div>
+
+  <!-- تخطي -->
+  <div class="skip" id="skipBtn">تخطي العرض (55)</div>
+
+  <script>
+    const phrases = [
+      "🥲آسف", "🤍بعتذر", "💙سامحيني",
+      "بحبك منار ❤️",
+      "يخليلي ميشتي 🌸",
+      "يؤبرني 🥹",
+      "ابوسو 😘",
+      "حبيبتي 💕",
+      "طبوشة 🫶",
+      "عمري ❤️",
+      "آنستي 🌹",
+      "منار عبدالله محيسن ✨",
+      "حياتي 💖",
+      "شريكي 🤍",
+      "بروتي 😄",
+      "رفيقتي 🫂",
+      "صاحبة الوش الحلو 😊",
+      "أم شامات 😍"
+    ];
+
+    const startBtn = document.getElementById("startBtn");
+    const startScreen = document.getElementById("startScreen");
+    const scene = document.getElementById("scene");
+    const skipBtn = document.getElementById("skipBtn");
+
+    let index = 0;
+    let timeLeft = 55;
+
+    function rand(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function showWord() {
+      const word = document.createElement("div");
+      word.className = "word";
+      word.textContent = phrases[index];
+
+      /* حجم عشوائي واضح */
+      word.style.fontSize = rand(26, 56) + "px";
+
+      /* موقع عشوائي */
+      word.style.left = rand(15, 75) + "%";
+      word.style.top = rand(20, 70) + "%";
+
+      /* حركة عشوائية */
+      word.style.setProperty("--from-x", rand(-120, 120) + "px");
+      word.style.setProperty("--from-y", rand(80, 200) + "px");
+      word.style.setProperty("--to-x", rand(-120, 120) + "px");
+      word.style.setProperty("--to-y", rand(-200, -80) + "px");
+
+      scene.appendChild(word);
+
+      setTimeout(() => word.remove(), 5000);
+
+      index = (index + 1) % phrases.length;
+    }
+
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = rand(14, 30) + "px";
+      heart.style.animationDuration = rand(6, 10) + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 10000);
+    }
+
+    startBtn.onclick = () => {
+      startScreen.style.display = "none";
+      scene.style.display = "block";
+      skipBtn.style.display = "block";
+
+      showWord();
+      setInterval(showWord, 3000);
+      setInterval(createHeart, 350);
+
+      const timer = setInterval(() => {
+        timeLeft--;
+        skipBtn.textContent = `تخطي العرض (${timeLeft})`;
+        if (timeLeft <= 0) window.location.href = "home.html";
+      }, 1000);
+
+      skipBtn.onclick = () => window.location.href = "home.html";
+    };
+  </script>
+
+</body>
+
+</html>
